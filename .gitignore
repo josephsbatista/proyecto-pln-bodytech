@@ -10,8 +10,10 @@ __pycache__/
 modelos/*
 !modelos/README.md
 
-# Corpus completo: se versiona solo si la licencia de Kaggle permite redistribuirlo (ver datos/LICENCIA_DATOS.md)
-datos/Big_AHR.csv
+# Big_AHR.csv sí se versiona: su licencia (CC BY-NC 4.0) permite compartirlo con atribución (datos/LICENCIA_DATOS.md)
 
 # Registros de la demo (trazabilidad local; no se versionan)
 logs/
+
+# Carpeta temporal para publicar en Hugging Face (scripts/publicar_hf.py)
+dist/

@@ -16,9 +16,13 @@ coordinador de la sede, manda a revisión humana lo que no sabe clasificar y res
 | **Error crítico** | Una reseña negativa que no se detecta |
 | **KPI** | Recall de negativas auditado por sede (meta ≥ 0,90), % automatizado, horas de lectura manual |
 
-> **Datos:** no existe un corpus público de reseñas de gimnasios en español. Se usa `Big_AHR.csv` (reseñas **reales y
-> públicas** de hoteles de Andalucía) como **proxy**: hotel = sede, ubicación = ciudad. **No hay datos de Bodytech en
-> este repositorio**; sus volúmenes y costos son supuestos declarados. Ver `datos/LICENCIA_DATOS.md`.
+> **Datos:** no existe un corpus público de reseñas de gimnasios en español. Se usa `Big_AHR.csv` del conjunto
+> [Andalusian Hotels' Reviews](https://www.kaggle.com/datasets/chizhikchi/andalusian-hotels-reviews-unbalanced)
+> (Mariia Chizhikova, Kaggle, 2021; licencia **CC BY-NC 4.0**): reseñas **reales y públicas** de hoteles de Andalucía
+> (TripAdvisor 2021 y corpus COAH 2014), usadas como **proxy**: hotel = sede, ubicación = ciudad. **No hay datos de
+> Bodytech en este repositorio**; sus volúmenes y costos son supuestos declarados. La licencia es **no comercial**: el
+> corpus sirve para este proyecto académico, pero un modelo en producción para Bodytech debe entrenarse con datos propios.
+> Detalle, cambios realizados y cita en `datos/LICENCIA_DATOS.md`.
 
 ## Resultados clave
 Partición por sede (sedes no vistas en test); el modelo se eligió con validación y el test se miró una sola vez.
@@ -46,6 +50,7 @@ suspensión en la sección 14 del notebook.
 ├── src/                                 funciones reutilizables (preprocesamiento y política de decisión)
 ├── app/                                 demo en vivo
 ├── modelos/                             artefactos entrenados (no se versionan; ver modelos/README.md)
+├── scripts/publicar_hf.py               publica la demo en Hugging Face Spaces
 ├── docs/                                registro de experimentos y declaración de uso de IA
 ├── entregables/                         informe técnico, presentación, tablero, matriz de riesgos y caso de negocio
 ├── requirements.txt                     dependencias con versiones exactas
@@ -57,7 +62,7 @@ suspensión en la sección 14 del notebook.
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env            # ajustar si hace falta (SEED, DATA_DIR, REENTRENAR)
-# copiar Big_AHR.csv en datos/ (ver datos/LICENCIA_DATOS.md)
+# Big_AHR.csv ya viene en datos/ (licencia en datos/LICENCIA_DATOS.md)
 jupyter nbconvert --to notebook --execute --inplace notebooks/Proyecto_Final_PLN.ipynb
 ```
 - **Primera ejecución:** entrena todo (≈ 3,5 h en un Apple M5 con MPS, de las cuales BETO ≈ 2,5 h; en Colab, activar GPU). BETO necesita GPU (CUDA o
@@ -79,6 +84,18 @@ python app/demo.py          # abre http://127.0.0.1:7860 (sin internet, carga lo
 - **Trazabilidad:** cada predicción se guarda en `logs/predicciones.csv` con fecha, decisión y versión de la política,
   pero **sin el texto** (solo una huella SHA-256): minimización de datos.
 - `python app/crear_muestra.py` regenera la muestra controlada desde `datos/Big_AHR.csv` y `datos/particion.csv`.
+- **Sin entrenar:** si `modelos/` está vacía, la demo descarga los modelos del Hub de Hugging Face cuando se define
+  `MODELOS_REPO=<usuario>/clasificador-resenas-sede-modelos` (unos 440 MB). Sin esa variable, explica cómo generarlos.
+
+### Publicar en Hugging Face Spaces
+```bash
+hf auth login                                               # token de escritura (no se guarda en el repositorio)
+python scripts/publicar_hf.py --usuario <usuario_hf>        # añadir --privado para que no sea público
+```
+Crea dos repositorios en la cuenta: **`clasificador-resenas-sede-modelos`** (baseline, BETO elegido y `politica.json`,
+con su tarjeta y licencia CC BY-NC 4.0) y el Space **`clasificador-resenas-por-sede`** (Gradio en CPU), que descarga
+los modelos al arrancar. La versión publicada usa el nombre neutro *Clasificador de reseñas por sede*
+(`DEMO_PUBLICA=1`, textos en `app/textos_publico.py`). `--solo-preparar` arma `dist/` sin subir nada, para revisarlo.
 
 ## Reproducibilidad
 - Semilla declarada `SEED=42`; las redes se repiten con 5 semillas y BETO con 3, y se reporta la variación.
