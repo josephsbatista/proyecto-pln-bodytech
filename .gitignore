@@ -1,0 +1,17 @@
+# Entorno y secretos
+.venv/
+.env
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+
+# Modelos entrenados: BETO pesa ~440 MB por corrida (límite de GitHub: 100 MB por archivo).
+# Se regeneran con el notebook; se conserva solo la explicación.
+modelos/*
+!modelos/README.md
+
+# Corpus completo: se versiona solo si la licencia de Kaggle permite redistribuirlo (ver datos/LICENCIA_DATOS.md)
+datos/Big_AHR.csv
+
+# Registros de la demo (trazabilidad local; no se versionan)
+logs/

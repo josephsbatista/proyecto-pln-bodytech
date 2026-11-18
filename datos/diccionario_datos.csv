@@ -1,0 +1,7 @@
+columna,tipo,nulos,valores distintos,ejemplo,descripción,uso en el modelo
+title,str,0,10262,Excelente y personal amable,Título que el huésped puso a su reseña,Entrada (se concatena al cuerpo)
+rating,int64,0,5,5,Estrellas de 1 a 5,"EXCLUIDA: determina la etiqueta (fuga, 1.1)"
+review_text,str,0,13330,Un hotel muy bueno.  El personal fue muy amab,Cuerpo de la reseña,Entrada
+location,str,1816,33,Seville_Province_of_Seville_Andalucia,Ciudad o municipio del hotel,Solo segmentos (provincia); no entra al modelo
+hotel,str,1816,715,H10_Casa_de_la_Plata,Nombre del hotel,Solo partición (grupo = sede) y segmentos; no entra al modelo
+label,int64,0,3,1,"Sentimiento derivado de las estrellas: 0 negativa, 3 neutra, 1 positiva",Etiqueta
