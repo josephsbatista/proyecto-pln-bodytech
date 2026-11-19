@@ -50,7 +50,7 @@ suspensión en la sección 14 del notebook.
 ├── src/                                 funciones reutilizables (preprocesamiento y política de decisión)
 ├── app/                                 demo en vivo
 ├── modelos/                             artefactos entrenados (no se versionan; ver modelos/README.md)
-├── scripts/publicar_hf.py               publica la demo en Hugging Face Spaces
+├── scripts/publicar_modelos.py          publica los modelos en Hugging Face (para la demo sin entrenar)
 ├── docs/                                registro de experimentos y declaración de uso de IA
 ├── entregables/                         informe técnico, presentación, tablero, matriz de riesgos y caso de negocio
 ├── requirements.txt                     dependencias con versiones exactas
@@ -84,18 +84,17 @@ python app/demo.py          # abre http://127.0.0.1:7860 (sin internet, carga lo
 - **Trazabilidad:** cada predicción se guarda en `logs/predicciones.csv` con fecha, decisión y versión de la política,
   pero **sin el texto** (solo una huella SHA-256): minimización de datos.
 - `python app/crear_muestra.py` regenera la muestra controlada desde `datos/Big_AHR.csv` y `datos/particion.csv`.
-- **Sin entrenar:** si `modelos/` está vacía, la demo descarga los modelos del Hub de Hugging Face cuando se define
-  `MODELOS_REPO=<usuario>/clasificador-resenas-sede-modelos` (unos 440 MB). Sin esa variable, explica cómo generarlos.
+- **Enlace público temporal:** `DEMO_COMPARTIR=1 python app/demo.py` crea además un enlace `*.gradio.live`
+  (válido una semana) mientras el equipo esté encendido.
 
-### Publicar en Hugging Face Spaces
+### Levantar la demo sin entrenar
+Los modelos están publicados en **https://huggingface.co/josephsuescun/clasificador-resenas-sede-modelos**
+(públicos, CC BY-NC 4.0). Si `modelos/` está vacía, la demo los descarga de ahí (≈ 440 MB la primera vez):
 ```bash
-hf auth login                                               # token de escritura (no se guarda en el repositorio)
-python scripts/publicar_hf.py --usuario <usuario_hf>        # añadir --privado para que no sea público
+pip install -r requirements.txt
+MODELOS_REPO=josephsuescun/clasificador-resenas-sede-modelos python app/demo.py
 ```
-Crea dos repositorios en la cuenta: **`clasificador-resenas-sede-modelos`** (baseline, BETO elegido y `politica.json`,
-con su tarjeta y licencia CC BY-NC 4.0) y el Space **`clasificador-resenas-por-sede`** (Gradio en CPU), que descarga
-los modelos al arrancar. La versión publicada usa el nombre neutro *Clasificador de reseñas por sede*
-(`DEMO_PUBLICA=1`, textos en `app/textos_publico.py`). `--solo-preparar` arma `dist/` sin subir nada, para revisarlo.
+Después de reentrenar, `hf auth login` y `python scripts/publicar_modelos.py --usuario <usuario_hf>` los actualizan.
 
 ## Reproducibilidad
 - Semilla declarada `SEED=42`; las redes se repiten con 5 semillas y BETO con 3, y se reporta la variación.

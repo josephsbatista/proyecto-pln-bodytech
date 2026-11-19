@@ -1,5 +1,5 @@
 """Ubica los modelos que usa la demo: primero en modelos/ (los genera el notebook) y, si faltan, los descarga
-del Hub de Hugging Face cuando la variable de entorno MODELOS_REPO indica el repositorio (por ejemplo, en el Space)."""
+del Hub de Hugging Face cuando la variable de entorno MODELOS_REPO indica el repositorio."""
 import json
 import os
 from pathlib import Path

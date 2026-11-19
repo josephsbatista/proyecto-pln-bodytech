@@ -2,7 +2,7 @@
 
 Uso:  python app/demo.py   → abrir http://127.0.0.1:7860
 Carga los modelos guardados por el notebook (no reentrena) y funciona sin internet. Si faltan y MODELOS_REPO está
-definida, los descarga del Hub de Hugging Face (así corre en el Space). DEMO_PUBLICA=1 usa un nombre neutro.
+definida, los descarga del Hub de Hugging Face. DEMO_COMPARTIR=1 crea además un enlace público temporal.
 """
 import hashlib
 import os
@@ -21,13 +21,6 @@ from src.artefactos import asegurar_modelos
 from src.modelos import Clasificadores
 from src.politica import AUTOMATICO, COORDINADOR, REVISION, cargar_politica, decidir, filtrar
 
-PUBLICA = os.getenv('DEMO_PUBLICA', '0') == '1'
-try:          # el Space solo lleva textos_publico.py (nombre neutro)
-    if PUBLICA:
-        raise ImportError
-    from app.textos import ENCABEZADO, TITULO
-except ImportError:
-    from app.textos_publico import ENCABEZADO, TITULO
 asegurar_modelos(RAIZ)
 POL = cargar_politica(RAIZ)
 print('Cargando modelos…')
@@ -133,8 +126,12 @@ def resumen(archivo, quien_decide):
     return resumen_md, tabla.round(1).reset_index(), ciudades, str(salida)
 
 
-with gr.Blocks(title=TITULO) as demo:
-    gr.Markdown(ENCABEZADO)
+with gr.Blocks(title='Reseñas por sede · Bodytech') as demo:
+    gr.Markdown("""
+# Clasificación del sentimiento de reseñas por sede · caso Bodytech
+Prototipo del proyecto final de PLN. Entrenado con reseñas **reales y públicas de hoteles** (proxy: hotel = sede); **no son datos de Bodytech**.
+**En operación decide el baseline** (TF-IDF de lemas + regresión logística); **BETO** corre al lado en *shadow mode*, como recomienda el proyecto.
+""")
     with gr.Tab('1 · Una reseña'):
         with gr.Row():
             with gr.Column(scale=3):
@@ -173,4 +170,6 @@ with gr.Blocks(title=TITULO) as demo:
         btn2.click(resumen, [archivo, quien], [res_md, tabla, grafico, descarga])
 
 if __name__ == '__main__':
-    demo.launch(show_error=True)   # local: 127.0.0.1:7860; en el Space, Gradio toma host y puerto del entorno
+    # http://127.0.0.1:7860
+    # DEMO_COMPARTIR=1 crea además un enlace público temporal (*.gradio.live, 1 semana) mientras el equipo esté encendido.
+    demo.launch(show_error=True, share=os.getenv('DEMO_COMPARTIR', '0') == '1')

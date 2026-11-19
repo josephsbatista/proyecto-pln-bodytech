@@ -15,5 +15,3 @@ modelos/*
 # Registros de la demo (trazabilidad local; no se versionan)
 logs/
 
-# Carpeta temporal para publicar en Hugging Face (scripts/publicar_hf.py)
-dist/
