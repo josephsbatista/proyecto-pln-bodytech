@@ -71,30 +71,43 @@ jupyter nbconvert --to notebook --execute --inplace notebooks/Proyecto_Final_PLN
   Con `REENTRENAR=1` se entrena todo de nuevo.
 - **Colab:** subir `Big_AHR.csv` a `/content`; el notebook instala lo que falta.
 
-## Demo en vivo
+## Demo en vivo (Gradio, en local)
+La demo corre en el propio computador y se abre en el navegador. El código está en `app/demo.py`.
+
+**1. Instalar (una sola vez)**
 ```bash
-python app/demo.py          # abre http://127.0.0.1:7860 (sin internet, carga los modelos de modelos/)
+git clone https://github.com/josephsbatista/proyecto-pln-bodytech && cd proyecto-pln-bodytech
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
 ```
+
+**2. Levantar la demo.** Necesita los modelos entrenados en `modelos/`. Hay dos formas de tenerlos:
+
+| Situación | Comando |
+|---|---|
+| Ya se ejecutó el notebook (los modelos están en `modelos/`) | `python app/demo.py` |
+| No se quiere entrenar (≈ 3,5 h): se descargan los modelos publicados en Hugging Face (≈ 440 MB, solo la primera vez) | `MODELOS_REPO=josephsuescun/clasificador-resenas-sede-modelos python app/demo.py` |
+
+**3. Abrir http://127.0.0.1:7860** en el navegador. Cargar BETO tarda unos segundos; la terminal debe quedar abierta
+mientras se usa la demo (se cierra con `Ctrl + C`).
+
+**Qué muestra**
 - **Pestaña 1 · Una reseña:** filtros previos (vacío, repetitivo, otro idioma, mayúsculas) → clase y probabilidades →
   acción (automático / revisión humana / coordinador de la sede) con los umbrales de `modelos/politica.json` → evidencia
   (palabras del baseline y oraciones que pesan en BETO). Decide el baseline; BETO se muestra al lado en *shadow mode*.
+  Los botones de casos de prueba cargan ejemplos de queja, negación, ironía, otro idioma, texto vacío, etc.
 - **Pestaña 2 · Resumen por sede:** procesa un CSV (por defecto `datos/muestra_controlada.csv`: 400 reseñas de test,
   20 sedes, 5 ciudades) y muestra % de negativas, quejas al coordinador y revisiones por sede, más la auditoría con la
   etiqueta real.
 - **Trazabilidad:** cada predicción se guarda en `logs/predicciones.csv` con fecha, decisión y versión de la política,
   pero **sin el texto** (solo una huella SHA-256): minimización de datos.
-- `python app/crear_muestra.py` regenera la muestra controlada desde `datos/Big_AHR.csv` y `datos/particion.csv`.
+
+**Opciones**
 - **Enlace público temporal:** `DEMO_COMPARTIR=1 python app/demo.py` crea además un enlace `*.gradio.live`
   (válido una semana) mientras el equipo esté encendido.
-
-### Levantar la demo sin entrenar
-Los modelos están publicados en **https://huggingface.co/josephsuescun/clasificador-resenas-sede-modelos**
-(públicos, CC BY-NC 4.0). Si `modelos/` está vacía, la demo los descarga de ahí (≈ 440 MB la primera vez):
-```bash
-pip install -r requirements.txt
-MODELOS_REPO=josephsuescun/clasificador-resenas-sede-modelos python app/demo.py
-```
-Después de reentrenar, `hf auth login` y `python scripts/publicar_modelos.py --usuario <usuario_hf>` los actualizan.
+- `python app/crear_muestra.py` regenera la muestra controlada desde `datos/Big_AHR.csv` y `datos/particion.csv`.
+- Después de reentrenar, `hf auth login` y `python scripts/publicar_modelos.py --usuario <usuario_hf>` actualizan los
+  modelos publicados (licencia CC BY-NC 4.0, como los datos).
 
 ## Reproducibilidad
 - Semilla declarada `SEED=42`; las redes se repiten con 5 semillas y BETO con 3, y se reporta la variación.
