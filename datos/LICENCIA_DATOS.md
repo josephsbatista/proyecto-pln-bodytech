@@ -28,4 +28,11 @@ Molina-González, M. D., Martínez-Cámara, E., Martín-Valdivia, M. T., & Ureñ
 - `Big_AHR.csv`: reseñas **reales y públicas** de huéspedes de hoteles de Andalucía (España), usadas como **proxy** de reseñas de sedes de Bodytech.
 - **No hay datos de Bodytech** en este repositorio. Los volúmenes y costos de Bodytech del notebook y del caso de negocio son **supuestos declarados**.
 - La auditoría (sección 1.5) no encontró correos reales y solo 0,01 % de URL; los "@" son lenguaje inclusivo ("chic@s").
-- `muestra_controlada.csv`: 400 reseñas reales del conjunto de test, sin modificar, para la demo.
+- `muestra_controlada.csv`: 400 reseñas reales del conjunto de test, para la demo, **anonimizadas**: los nombres de empleados y
+  anfitriones (por ejemplo, "el recepcionista Fernando") se reemplazan por `[NOMBRE]`, y los correos, URL y teléfonos por
+  `[CORREO]`, `[URL]` y `[TELEFONO]`. Quedan 77 nombres enmascarados en 55 reseñas. La lista de nombres salió de revisar a mano
+  las entidades de persona de spaCy y las palabras con mayúscula poco comunes; se conservan lugares, marcas y nombres de hoteles,
+  que no son datos personales. El enmascarado no cambia ninguna predicción de la demo. Lo hace `app/crear_muestra.py`.
+- `Big_AHR.csv` se redistribuye **tal como lo publicó su autora** (corpus público, CC BY-NC 4.0), sin anonimizar, para que el
+  notebook sea reproducible. Sus textos pueden traer nombres de pila de empleados que los huéspedes mencionan; por eso el
+  proyecto no los usa para evaluar personas (ver "Usos no previstos" en la ficha del dataset del informe técnico).

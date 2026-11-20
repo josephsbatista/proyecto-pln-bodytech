@@ -105,7 +105,7 @@ mientras se usa la demo (se cierra con `Ctrl + C`).
 **Opciones**
 - **Enlace público temporal:** `DEMO_COMPARTIR=1 python app/demo.py` crea además un enlace `*.gradio.live`
   (válido una semana) mientras el equipo esté encendido.
-- `python app/crear_muestra.py` regenera la muestra controlada desde `datos/Big_AHR.csv` y `datos/particion.csv`.
+- `python app/crear_muestra.py` regenera la muestra controlada desde `datos/Big_AHR.csv` y `datos/particion.csv`, y la anonimiza (nombres de personas → `[NOMBRE]`).
 - Después de reentrenar, `hf auth login` y `python scripts/publicar_modelos.py --usuario <usuario_hf>` actualizan los
   modelos publicados (licencia CC BY-NC 4.0, como los datos).
 
