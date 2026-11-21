@@ -42,17 +42,29 @@ Partición por sede (sedes no vistas en test); el modelo se eligió con validaci
 operar si cumple los 4 criterios con reseñas reales de Bodytech. Detalle, condiciones del piloto, gobierno y criterio de
 suspensión en la sección 14 del notebook.
 
+## Entregables
+| # | Entregable | Dónde está |
+|---|---|---|
+| 1 | Repositorio (código, README, dependencias, licencias) | este repositorio |
+| 2 | Notebook ejecutado de inicio a fin | `notebooks/Proyecto_Final_PLN.ipynb` (y `.html`) |
+| 3 | Dataset, diccionario, partición y licencia | `datos/` |
+| 4 | Informe técnico | `entregables/Informe_Tecnico.pdf` |
+| 5 | Presentación final | `entregables/Presentacion_Final.pptx` |
+| 6 | Matriz de riesgos | `entregables/Matriz_Riesgos.xlsx` |
+| 7 | Demo en vivo | `app/demo.py` (sección *Demo en vivo*; capturas en `docs/capturas_demo/`) |
+
 ## Estructura
 ```
 ├── notebooks/Proyecto_Final_PLN.ipynb   notebook principal: EDA, preparación, baseline, modelos avanzados,
 │                                         evaluación, errores, eficiencia, gobierno y conclusiones
+├── notebooks/Proyecto_Final_PLN.html   el mismo notebook ejecutado, para leer en el navegador
 ├── datos/                               licencia y origen, diccionario de datos, partición por sede
 ├── src/                                 funciones reutilizables (preprocesamiento y política de decisión)
 ├── app/                                 demo en vivo
 ├── modelos/                             artefactos entrenados (no se versionan; ver modelos/README.md)
 ├── scripts/publicar_modelos.py          publica los modelos en Hugging Face (para la demo sin entrenar)
-├── docs/                                registro de experimentos y declaración de uso de IA
-├── entregables/                         informe técnico, presentación, tablero, matriz de riesgos y caso de negocio
+├── docs/                                registro de experimentos, declaración de uso de IA y capturas de la demo
+├── entregables/                         informe técnico (PDF), presentación, matriz de riesgos, tablero y caso de negocio
 ├── requirements.txt                     dependencias con versiones exactas
 └── .env.example                         configuración (sin secretos)
 ```
